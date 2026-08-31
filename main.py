@@ -49,7 +49,6 @@ try:
 
         except AssertionError:
             print("Невозможный ход! Попробуйте снова.")
-            continue
 
         continue
 
