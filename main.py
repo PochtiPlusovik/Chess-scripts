@@ -15,6 +15,7 @@ try:
 
     win = 0
     while win < 1:
+
         try:
             clear_console()
             print(board)
@@ -34,7 +35,6 @@ try:
                 result = engine.play(board, chess.engine.Limit(time=2))
                 clear_console()
                 board.push(result.move)
-                print(board)
                 break
 
             if board.is_checkmate():
@@ -44,11 +44,12 @@ try:
                 print("Пат!")
                 win += 2
             elif board.is_check():
-                print("Невозможный код!")
+                print("Невозможный ход! Попробуйте снова.")
                 win += 2
 
-        except chess.InvalidMoveError:
-            print("Невозможный ход!")
+        except AssertionError:
+            print("Невозможный ход! Попробуйте снова.")
+            continue
 
         continue
 
