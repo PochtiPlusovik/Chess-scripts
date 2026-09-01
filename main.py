@@ -30,7 +30,7 @@ try:
                 move = chess.Move.from_uci(hod)
             except chess.engine.EngineTerminatedError:
                 print("Невозможный ход! Попробуйте снова.")
-                #board.pop()
+                # board.pop()
 
             board.push(move)
             clear_console()
