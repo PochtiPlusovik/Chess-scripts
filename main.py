@@ -1,6 +1,7 @@
 import os
 import chess
 import chess.engine
+from chess.svg import board
 
 board = chess.Board()
 
@@ -25,7 +26,12 @@ try:
                 print("Вы вышли. Игра окончена.")
                 os._exit(0)
 
-            move = chess.Move.from_uci(hod)
+            try:
+                move = chess.Move.from_uci(hod)
+            except chess.engine.EngineTerminatedError:
+                print("Невозможный ход! Попробуйте снова.")
+                #board.pop()
+
             board.push(move)
             clear_console()
             print(board)
@@ -44,12 +50,19 @@ try:
                 print("Пат!")
                 win += 2
             elif board.is_check():
-                print("Невозможный ход! Попробуйте снова.")
+                print("Шах!")
+            elif board.is_legal(move):
+                print("Пат!")
                 win += 2
 
         except AssertionError:
             print("Невозможный ход! Попробуйте снова.")
-            continue
+            board.pop()
+        except chess.InvalidMoveError:
+            print("Невозможный ход! Попробуйте снова.")
+        except chess.engine.EngineTerminatedError:
+            print("Невозможный ход4! Попробуйте снова.")
+            board.pop()
 
         continue
 
