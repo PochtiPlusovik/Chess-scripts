@@ -4,7 +4,7 @@ import chess.engine
 from chess.svg import board
 
 board = chess.Board()
-
+path = input("\nВведите путь к движку Stockfish:")
 
 def clear_console():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -15,7 +15,7 @@ def print_board():
     print(board)
     print("_______________")
 
-engine = chess.engine.SimpleEngine.popen_uci("/home/pion/Stockfish/src/stockfish")
+engine = chess.engine.SimpleEngine.popen_uci(path)
 
 try:
 
@@ -31,21 +31,19 @@ try:
                 print("Вы вышли. Игра окончена.")
                 os._exit(0)
 
-            try:
-                move = chess.Move.from_uci(hod)
-            except chess.engine.EngineTerminatedError:
+            move = chess.Move.from_uci(hod)
+            if board.is_legal(move):
+                print("Ход обрабатывается...")
+            else:
                 print("Невозможный ход! Попробуйте снова.")
-                # board.pop()
+                continue
 
             board.push(move)
             print_board()
 
-            usr = 2
-            while usr > 1:
-                result = engine.play(board, chess.engine.Limit(time=2))
-                clear_console()
-                board.push(result.move)
-                break
+            result = engine.play(board, chess.engine.Limit(time=2))
+            clear_console()
+            board.push(result.move)
 
             if board.is_checkmate():
                 print("Мат!")
@@ -55,17 +53,11 @@ try:
                 win += 2
             elif board.is_check():
                 print("Шах!")
-            elif board.is_legal(move):
-                print("Пат!")
-                win += 2
 
         except AssertionError:
             print("Невозможный ход! Попробуйте снова.")
         except chess.InvalidMoveError:
             print("Невозможный ход! Попробуйте снова.")
-        except chess.engine.EngineTerminatedError:
-            print("Невозможный ход! Попробуйте снова.")
-            board.pop()
 
         continue
 
