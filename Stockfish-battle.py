@@ -9,11 +9,15 @@ if Path("Stockfish.txt").exists():
     with open("Stockfish.txt", "r", encoding="utf-8") as file:
         spath = file.read()
 else:
-    path = input("\nВведите путь к движку Stockfish:")
-    with open("Stockfish.txt", "w", encoding="utf-8") as file:
-        file.write(path)
-    with open("Stockfish.txt", "r", encoding="utf-8") as file:
-        spath = file.read()
+    try:
+        path = input("\nВведите путь к движку Stockfish:")
+        with open("Stockfish.txt", "w", encoding="utf-8") as file:
+            file.write(path)
+        with open("Stockfish.txt", "r", encoding="utf-8") as file:
+            spath = file.read()
+    except KeyboardInterrupt:
+        print("\nВы вышли.")
+        os._exit(0)
 
 try:
 
