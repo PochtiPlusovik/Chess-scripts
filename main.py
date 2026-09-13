@@ -1,10 +1,20 @@
 import os
-import chess
 import chess.engine
 from chess.svg import board
+from pathlib import Path
 
 board = chess.Board()
-path = input("\nВведите путь к движку Stockfish:")
+folder = Path(".")
+
+if Path("Stockfish.txt").exists():
+    with open("Stockfish.txt", "r", encoding="utf-8") as file:
+        spath = file.read()
+else:
+    path = input("\nВведите путь к движку Stockfish:")
+    with open("Stockfish.txt", "w", encoding="utf-8") as file:
+        file.write(path)
+    with open("Stockfish.txt", "r", encoding="utf-8") as file:
+        spath = file.read()
 
 def clear_console():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -15,7 +25,16 @@ def print_board():
     print(board)
     print("_______________")
 
-engine = chess.engine.SimpleEngine.popen_uci(path)
+try:
+    engine = chess.engine.SimpleEngine.popen_uci(spath)
+except FileNotFoundError:
+    print("Неверный путь к движку. Убедитесь в его правильности и попробуйте снова.")
+    Path("Stockfish.txt").unlink()
+    os._exit(1)
+except PermissionError:
+    print("Неверный путь к движку или отсутствие прав. Если вы уверены в правильности пути, решите проблему с правами доступа.")
+    Path("Stockfish.txt").unlink()
+    os._exit(1)
 
 try:
 
