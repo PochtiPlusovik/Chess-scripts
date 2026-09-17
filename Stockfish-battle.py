@@ -1,4 +1,5 @@
 import os
+import sys
 import chess.engine
 from chess.svg import board
 from pathlib import Path
@@ -22,8 +23,6 @@ else:
 try:
 
     board = chess.Board()
-    path = input("\nВведите путь к движку Stockfish:")
-
 
     def clear_console():
         os.system('cls' if os.name == 'nt' else 'clear')
@@ -49,8 +48,8 @@ try:
 
     win = 0
     while win < 1:
+        sys.stdout = open('output.txt', 'a', encoding='utf-8')
         print_board()
-
         result = engine.play(board, chess.engine.Limit(time=2))
         clear_console()
         board.push(result.move)
